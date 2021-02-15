@@ -26,34 +26,40 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return response()->json($this->studentService->index());
+        return response(
+            removeQuotesFromJsonKeys($this->studentService->index()->toJson()
+            ))->header('Content-Type', 'application/json');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  CreateStudentRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function store(CreateStudentRequest $request)
     {
-        return response()->json([
-            'id' => $this->studentService->store($request)
-        ]);
+
+        return response(
+            '{id = "'.$this->studentService->store($request).'"}'
+        )->header('Content-Type', 'application/json');
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Student  $student
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function show(Student $student)
     {
-        return response()->json($student);
+
+        return response(
+            removeQuotesFromJsonKeys($student->toJson()
+            ))->header('Content-Type', 'application/json');
     }
 }
